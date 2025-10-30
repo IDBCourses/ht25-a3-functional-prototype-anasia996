@@ -6,7 +6,7 @@
 import * as Util from "./util.js";
 
 // State variables are the parts of your program that change over time.
-const size = 75;
+const size = 100;
 let x = 0.5 - size/window.innerWidth/2
 let y = 1 - size/window.innerHeight;
 
