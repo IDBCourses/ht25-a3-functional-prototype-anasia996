@@ -11,7 +11,7 @@ const size = 50;
 const row = ['KeyZ', 'KeyX', 'KeyC', 'KeyV', 'KeyB', 'KeyN', 'KeyM']; //keys for moving right and left
 const column = ['Digit4', 'KeyR', 'KeyF', 'KeyV']; //keys for moving up
 
-  //outside walls
+//outside walls
 const wall1 = document.getElementById('thing1');
 const wall2 = document.getElementById('thing2');
 const wall3 = document.getElementById('thing3');
@@ -30,6 +30,8 @@ const maze = [wall1, wall2, wall3, wall4, wall5, wall6, wall7, wall8, wall9];
 // State variables are the parts of your program that change over time.
 let x = 1075;
 let y = 665;
+let startX = 1075;
+let startY = 665;
 let previousKeyRow = null;
 let currentKeyRow = null;
 let previousKeyColumn = null;
@@ -61,16 +63,6 @@ let wallY = [
   575
 ];
 
-// Code that runs over and over again
-function loop() {
-  Util.setSize(size);
-  Util.setPositionPixels(x, y);
-  for (let i = 0; i < maze.length; i++){
-    Util.setPositionPixels(wallX[i], wallY[i], maze[i]);
-  }
-  window.requestAnimationFrame(loop);
-}
-
 
 //recognize whether the swipe is to the left or right
 function swipeRightLeft(event){
@@ -100,14 +92,14 @@ function swipeRightLeft(event){
 //moving to the right when you hold space
 function moveRight(event){
   if (event.code === 'Space'){
-    x = x * 1.1;
+    x = x * 1.15;
   }
 }
 
 //moving to the left when you hold space
 function moveLeft(event){
   if (event.code === 'Space'){
-    x = x * 0.9;
+    x = x * 0.85;
   }
 }
 
@@ -130,10 +122,46 @@ function swipeUp(event){
 
 function moveUp(event){
   if (event.code === 'Space'){
-    y = y * 0.9;
+    y = y * 0.85;
   }
 }
 
+function checkCollision(x, y) {
+  const between = (x, min, max) => {
+    if (x > min && x < max){
+      return true;
+    }
+  }
+  if(
+    x < 490 ||
+    x > 1060 ||
+    y < 90||
+    between(x, 750, 1060) && between(y, 175, 265) ||
+    between(x, 750, 840) && between(y, 175, 440) ||
+    between(x, 800, 1015) && between(y, 350, 440) ||
+    between(x, 575, 665) && between(y, 90, 440) ||
+    between(x, 575, 1060) && between(y, 525, 615)
+  ){ 
+    return true;
+  }
+  else {
+    return false;
+  }
+}
+
+
+function loop() {
+  Util.setSize(size);
+  Util.setPositionPixels(x, y);
+  for (let i = 0; i < maze.length; i++){
+    Util.setPositionPixels(wallX[i], wallY[i], maze[i]);
+  }
+  if (checkCollision(x,y)){
+    //in case of collision send object to the start position
+    Util.setPositionPixels(startX, startY)
+  }
+  window.requestAnimationFrame(loop);
+}
 // Setup is run once, at the start of the program. It sets everything up for us!
 function setup() {
   // Put your event listener code here
