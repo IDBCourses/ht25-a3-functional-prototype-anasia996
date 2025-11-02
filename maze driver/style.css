@@ -5,7 +5,73 @@
     position: absolute;
     border-radius: 0%;
 }
+#thing1 {
+    width: 40px;
+    height: 700px;
+    background-color: black;
+    position: absolute;
+    display: flex;
+}
 
+#thing2 {
+    width: 40px;
+    height: 700px;
+    background-color: black;
+    position: absolute;
+    display: flex;
+}
+
+#thing3 {
+    width: 700px;
+    height: 40px;
+    background-color: black;
+    position: absolute;
+    display: flex;
+}
+#thing4 {
+    width: 740px;
+    height: 40px;
+    background-color: black;
+    position: absolute;
+    display: flex;
+}
+#thing5 {
+    width: 40px;
+    height: 390px;
+    background-color: black;
+    position: absolute;
+    display: flex;
+}
+
+#thing6 {
+    width: 40px;
+    height: 175px;
+    background-color: black;
+    position: absolute;
+    display: flex;
+}
+
+#thing7 {
+    width: 350px;
+    height: 40px;
+    background-color: black;
+    position: absolute;
+    display: flex;
+}
+#thing8 {
+    width: 215px;
+    height: 40px;
+    background-color: black;
+    position: absolute;
+    display: flex;
+}
+#thing9 {
+    width: 525px;
+    height: 40px;
+    background-color: black;
+    position: absolute;
+    display: flex;
+}
 /* Prevent padding and border from affecting element width. */
 *,
 ::before,
