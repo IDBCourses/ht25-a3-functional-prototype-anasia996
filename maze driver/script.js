@@ -28,10 +28,10 @@ const wall9 = document.getElementById('thing9');
 const maze = [wall1, wall2, wall3, wall4, wall5, wall6, wall7, wall8, wall9];
 
 // State variables are the parts of your program that change over time.
-let x = 1075;
-let y = 665;
-let startX = 1075;
-let startY = 665;
+let x = 1050;
+let y = 625;
+let startX = 1050;
+let startY = 625;
 let previousKeyRow = null;
 let currentKeyRow = null;
 let previousKeyColumn = null;
@@ -39,30 +39,29 @@ let currentKeyColumn = null;
 
 // the X position for each wall
 let wallX = [
-  450,
-  1150,
-  450,
-  450,
-  625,
+  490,
+  1110,
+  490,
+  490,
+  655,
   800,
   800,
   800,
-  625
+  655
 ];
 
 // the Y positionn for each wall
 let wallY = [
-  50,
-  50,
-  50,
-  750,
-  50,
-  225,
-  225,
+  90,
+  90,
+  90,
+  710,
+  90,
+  255,
+  255,
   400,
-  575
+  545
 ];
-
 
 //recognize whether the swipe is to the left or right
 function swipeRightLeft(event){
@@ -74,32 +73,32 @@ function swipeRightLeft(event){
     console.log(`${previousIndexRow} -> ${currentIndexRow}`);
     if (currentIndexRow > previousIndexRow){
       row.push('Space'); //otherwise space has index of -1
-      document.addEventListener('keydown', moveRight);
-      document.removeEventListener('keydown', moveLeft);
-      document.removeEventListener('keydown', moveUp);
+      document.addEventListener('keypress', moveRight);
+      document.removeEventListener('keypress', moveLeft);
+      document.removeEventListener('keypress', moveUp);
     } else if (currentIndexRow < previousIndexRow){
       row.pop('Space');
-      document.addEventListener('keydown', moveLeft);
-      document.removeEventListener('keydown', moveRight);
-      document.removeEventListener('keydown', moveUp);
+      document.addEventListener('keypress', moveLeft);
+      document.removeEventListener('keypress', moveRight);
+      document.removeEventListener('keypress', moveUp);
     }
   } else {
-    document.removeEventListener('keydown', moveRight);
-    document.removeEventListener('keydown', moveLeft);
+    document.removeEventListener('keypress', moveRight);
+    document.removeEventListener('keypress', moveLeft);
   }
 }
 
 //moving to the right when you hold space
 function moveRight(event){
   if (event.code === 'Space'){
-    x = x * 1.15;
+    x = x * 1.1;
   }
 }
 
 //moving to the left when you hold space
 function moveLeft(event){
   if (event.code === 'Space'){
-    x = x * 0.85;
+    x = x * 0.9;
   }
 }
 
@@ -111,36 +110,45 @@ function swipeUp(event){
     let currentIndexColumn = column.indexOf(currentKeyColumn);
     console.log(`${previousIndexColumn} -> ${currentIndexColumn}`);
     if (currentIndexColumn < previousIndexColumn){
-      document.addEventListener('keydown', moveUp);
-      document.removeEventListener('keydown', moveRight);
-      document.removeEventListener('keydown', moveLeft);
+      document.addEventListener('keypress', moveUp);
+      document.removeEventListener('keypress', moveRight);
+      document.removeEventListener('keypress', moveLeft);
     } 
   } else {
-    document.removeEventListener('keydown', moveUp);
+    document.removeEventListener('keypress', moveUp);
   }
 }
 
 function moveUp(event){
-  if (event.code === 'Space'){
-    y = y * 0.85;
+  if (
+    event.code === 'KeyV'
+  ){
+    y = y * 0.9;
   }
 }
-
+function startPosition(){
+  Util.setPositionPixels(startX, startY);
+  let previousKeyRow = null;
+  let currentKeyRow = null;
+  let previousKeyColumn = null;
+  let currentKeyColumn = null;
+}
 function checkCollision(x, y) {
   const between = (x, min, max) => {
-    if (x > min && x < max){
+    if (x >= min && x <= max){
       return true;
     }
   }
   if(
-    x < 490 ||
-    x > 1060 ||
-    y < 90||
-    between(x, 750, 1060) && between(y, 175, 265) ||
-    between(x, 750, 840) && between(y, 175, 440) ||
-    between(x, 800, 1015) && between(y, 350, 440) ||
-    between(x, 575, 665) && between(y, 90, 440) ||
-    between(x, 575, 1060) && between(y, 525, 615)
+    x <= 530||
+    x >= 1110 - size ||
+    y <= 130 ||
+    y >= 710 - size ||
+    between(x, 800 - size, 1110 - size) && between(y, 255 - size, 295) ||
+    between(x, 800 - size, 840) && between(y, 255 - size, 440) ||
+    between(x, 800 - size, 995) && between(y, 400 - size, 440) ||
+    between(x, 655 - size, 695) && between(y, 130, 440) ||
+    between(x, 655 - size, 1110 - size) && between(y, 545 - size, 595)
   ){ 
     return true;
   }
@@ -149,7 +157,6 @@ function checkCollision(x, y) {
   }
 }
 
-
 function loop() {
   Util.setSize(size);
   Util.setPositionPixels(x, y);
@@ -157,17 +164,20 @@ function loop() {
     Util.setPositionPixels(wallX[i], wallY[i], maze[i]);
   }
   if (checkCollision(x,y)){
-    //in case of collision send object to the start position
-    Util.setPositionPixels(startX, startY)
+    startPosition();
   }
   window.requestAnimationFrame(loop);
-}
+}    
+
+
+
 // Setup is run once, at the start of the program. It sets everything up for us!
 function setup() {
+  startPosition();
   // Put your event listener code here
-  window.addEventListener('keydown', swipeRightLeft)
-  window.addEventListener('keydown', swipeUp);
+  window.addEventListener('keypress', swipeRightLeft)
+  window.addEventListener('keypress', swipeUp);
   window.requestAnimationFrame(loop);
 } 
-
-setup(); // Always remember to call setup()!
+window.setInterval(setup(), 20);
+//setup(); // Always remember to call setup()!
