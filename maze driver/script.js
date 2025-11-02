@@ -6,76 +6,79 @@
 import * as Util from "./util.js";
 
 // Settings variables should contain all of the "fixed" parts of your programs
+
 const size = 50;
-const row = ['KeyZ', 'KeyX', 'KeyC', 'KeyV', 'KeyB', 'KeyN', 'KeyM'];
-const column = ['KeyV', 'KeyF','KeyR','Digit4'];
-//outside borders
-const wall1 = document.getElementById('thing1'); 
-const wall2 = document.getElementById('thing2'); 
-const wall3 = document.getElementById('thing3'); 
-const wall4 = document.getElementById('thing4'); 
-//inside borders
+const row = ['KeyZ', 'KeyX', 'KeyC', 'KeyV', 'KeyB', 'KeyN', 'KeyM']; //keys for moving right and left
+const column = ['Digit4', 'KeyR', 'KeyF', 'KeyV']; //keys for moving up
+
+  //outside walls
+const wall1 = document.getElementById('thing1');
+const wall2 = document.getElementById('thing2');
+const wall3 = document.getElementById('thing3');
+const wall4 = document.getElementById('thing4');
+
+//inside walls
 const wall5 = document.getElementById('thing5'); 
 const wall6 = document.getElementById('thing6'); 
 const wall7 = document.getElementById('thing7'); 
 const wall8 = document.getElementById('thing8'); 
 const wall9 = document.getElementById('thing9'); 
 
+//array of all the walls
+const maze = [wall1, wall2, wall3, wall4, wall5, wall6, wall7, wall8, wall9];
+
 // State variables are the parts of your program that change over time.
-// the X position for each wall
-let wall1X = 450;
-let wall2X = 1150;
-let wall3X = 450;
-let wall4X = 450;
-let wall5X = 625;
-let wall6X = 800;
-let wall7X = 800;
-let wall8X = 800;
-let wall9X = 625;
-
-// the Y positionn for each wall
-let wall1Y = 50;
-let wall2Y = 50;
-let wall3Y = 50;
-let wall4Y = 750;
-let wall5Y = 50;
-let wall6Y = 225;
-let wall7Y = 225;
-let wall8Y = 400;
-let wall9Y = 575;
-
 let x = 1075;
 let y = 665;
-let previousKey = null;
-let currentKey = null;
-//let previousKey = null;
-//let currentKey = null;
+let previousKeyRow = null;
+let currentKeyRow = null;
+let previousKeyColumn = null;
+let currentKeyColumn = null;
+
+// the X position for each wall
+let wallX = [
+  450,
+  1150,
+  450,
+  450,
+  625,
+  800,
+  800,
+  800,
+  625
+];
+
+// the Y positionn for each wall
+let wallY = [
+  50,
+  50,
+  50,
+  750,
+  50,
+  225,
+  225,
+  400,
+  575
+];
 
 // Code that runs over and over again
 function loop() {
   Util.setSize(size);
   Util.setPositionPixels(x, y);
-  Util.setPositionPixels(wall1X, wall1Y, wall1);
-  Util.setPositionPixels(wall2X, wall2Y, wall2);
-  Util.setPositionPixels(wall3X, wall3Y, wall3);
-  Util.setPositionPixels(wall4X, wall4Y, wall4);
-  Util.setPositionPixels(wall5X, wall5Y, wall5);
-  Util.setPositionPixels(wall6X, wall6Y, wall6);
-  Util.setPositionPixels(wall7X, wall7Y, wall7);
-  Util.setPositionPixels(wall8X, wall8Y, wall8);
-  Util.setPositionPixels(wall9X, wall9Y, wall9);
- 
+  for (let i = 0; i < maze.length; i++){
+    Util.setPositionPixels(wallX[i], wallY[i], maze[i]);
+  }
   window.requestAnimationFrame(loop);
 }
 
 
 //recognize whether the swipe is to the left or right
 function swipeRightLeft(event){
-  if (row.entries(event.code)){
-    previousKey = currentKey;
-    currentKey = event.code;
-    let previousIndexRow = row.indexOf(previousKey);
-    let currentIndexRow = row.indexOf(currentKey);
+  if (row.includes(event.code)){
+    previousKeyRow = currentKeyRow;
+    currentKeyRow = event.code;
+    let previousIndexRow = row.indexOf(previousKeyRow);
+    let currentIndexRow = row.indexOf(currentKeyRow);
     console.log(`${previousIndexRow} -> ${currentIndexRow}`);
     if (currentIndexRow > previousIndexRow){
       row.push('Space'); //otherwise space has index of -1
@@ -89,54 +92,53 @@ function swipeRightLeft(event){
       document.removeEventListener('keydown', moveUp);
     }
   } else {
-    document.removeEventListener('keydown', moveUp);
     document.removeEventListener('keydown', moveRight);
     document.removeEventListener('keydown', moveLeft);
   }
 }
+
 //moving to the right when you hold space
 function moveRight(event){
   if (event.code === 'Space'){
-    x = x * 1.05;
+    x = x * 1.1;
   }
 }
+
 //moving to the left when you hold space
 function moveLeft(event){
   if (event.code === 'Space'){
-    x = x * 0.95;
+    x = x * 0.9;
   }
 }
 
 function swipeUp(event){
-  if (column.entries(event.code)){
-    previousKey = currentKey;
-    currentKey = event.code;
-    let previousIndex = column.indexOf(previousKey);
-    let currentIndex = column.indexOf(currentKey);
-    if (currentIndex > previousIndex){
-      column.push('Space');
+  if (column.includes(event.code)){
+    previousKeyColumn = currentKeyColumn;
+    currentKeyColumn = event.code;
+    let previousIndexColumn = column.indexOf(previousKeyColumn);
+    let currentIndexColumn = column.indexOf(currentKeyColumn);
+    console.log(`${previousIndexColumn} -> ${currentIndexColumn}`);
+    if (currentIndexColumn < previousIndexColumn){
       document.addEventListener('keydown', moveUp);
       document.removeEventListener('keydown', moveRight);
       document.removeEventListener('keydown', moveLeft);
     } 
   } else {
     document.removeEventListener('keydown', moveUp);
-    document.removeEventListener('keydown', moveRight);
-    document.removeEventListener('keydown', moveLeft);
-  }
-}
-function moveUp(event){
-  if (event.code === 'Space'){
-    y = y * 0.95;
   }
 }
 
+function moveUp(event){
+  if (event.code === 'Space'){
+    y = y * 0.9;
+  }
+}
 
 // Setup is run once, at the start of the program. It sets everything up for us!
 function setup() {
   // Put your event listener code here
   window.addEventListener('keydown', swipeRightLeft)
-  //window.addEventListener('keydown', swipeUp);
+  window.addEventListener('keydown', swipeUp);
   window.requestAnimationFrame(loop);
 } 
 
