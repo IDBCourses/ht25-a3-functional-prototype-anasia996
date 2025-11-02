@@ -5,13 +5,22 @@
 
 import * as Util from "./util.js";
 
-// State variables are the parts of your program that change over time.
-const size = 100;
-let x = 0.5 - size/window.innerWidth/2
-let y = 1 - size/window.innerHeight;
-
 // Settings variables should contain all of the "fixed" parts of your programs
+const size = 50;
+const row = ['KeyZ', 'KeyX', 'KeyC', 'KeyV', 'KeyB', 'KeyN', 'KeyM'];
+const column = ['KeyV', 'KeyF','KeyR','Digit4'];
+// Define the maze layout (1 represents walls, 0 represents paths)
+const mazeLayout = [
+  
+];
 
+// State variables are the parts of your program that change over time.
+let x = 0.5 - size/window.innerWidth;
+let y = 1 - size/window.innerHeight;
+let previousKeyRow = null;
+let currentKeyRow = null;
+let previousKeyColumn = null;
+let currentKeyColumn = null;
 
 // Code that runs over and over again
 function loop() {
@@ -19,86 +28,78 @@ function loop() {
   Util.setPosition(x, y);
   window.requestAnimationFrame(loop);
 }
+function createMaze(){
+} 
 
-//function for thew object to move up after you press U and hold SPACE
-function up(event){
-  if (event.code === 'KeyU' ){
-    document.addEventListener('keypress', moveUp);
-  } else if (event.code === 'KeyR') { //doesn work when i use !== keyU for some reson
-    document.removeEventListener('keypress', moveUp)
-  } else if (event.code === 'KeyL'){
-    document.removeEventListener('keypress', moveUp);
-  } else if (event.code === 'KeyD'){
-    document.removeEventListener('keypress', moveUp);
+//recognize whether the swipe is to the left or right
+function swipeRightLeft(event){
+  if (row.entries(event.code)){
+    previousKeyRow = currentKeyRow;
+    currentKeyRow = event.code;
+    let previousIndexRow = row.indexOf(previousKeyRow);
+    let currentIndexRow = row.indexOf(currentKeyRow);
+    console.log(`${previousIndexRow} -> ${currentIndexRow}`);
+    if (currentIndexRow > previousIndexRow){
+      row.push('Space'); //otherwise space has index of -1
+      document.addEventListener('keydown', moveRight);
+      document.removeEventListener('keydown', moveLeft);
+      document.removeEventListener('keydown', moveUp);
+    } else if (currentIndexRow < previousIndexRow){
+      row.pop('Space');
+      document.addEventListener('keydown', moveLeft);
+      document.removeEventListener('keydown', moveRight);
+      document.removeEventListener('keydown', moveUp);
+    }
+  } else {
+    document.removeEventListener('keydown', moveUp);
+    document.removeEventListener('keydown', moveRight);
+    document.removeEventListener('keydown', moveLeft);
+  }
+}
+//moving to the right when you hold space
+function moveRight(event){
+  if (event.code === 'Space'){
+    x = x * 1.1;
+  }
+}
+//moving to the left when you hold space
+function moveLeft(event){
+  if (event.code === 'Space'){
+    x = x * 0.9;
+  }
+}
+
+function swipeUp(event){
+  if (column.entries(event.code)){
+    previousKeyColumn = currentKeyColumn;
+    currentKeyColumn = event.code;
+    let previousIndexColumn = column.indexOf(previousKeyColumn);
+    let currentIndexColumn = column.indexOf(currentKeyColumn);
+    if (currentIndexColumn > previousIndexColumn){
+      column.push('Space');
+      document.addEventListener('keydown', moveUp);
+      document.removeEventListener('keydown', moveRight);
+      document.removeEventListener('keydown', moveLeft);
+    } 
+  } else {
+    document.removeEventListener('keydown', moveUp);
+    document.removeEventListener('keydown', moveRight);
+    document.removeEventListener('keydown', moveLeft);
   }
 }
 function moveUp(event){
   if (event.code === 'Space'){
-    y = y * 0.95;
+    y = y * 0.9;
   }
 }
-function down(event){
-  if (event.code === 'KeyD'){
-    document.addEventListener('keypress', moveDown);
-  } else if (event.code === 'KeyR') {
-    document.removeEventListener('keypress', moveDown)
-  } else if (event.code === 'KeyL'){
-    document.removeEventListener('keypress', moveDown);
-  } else if (event.code === 'KeyU'){
-    document.removeEventListener('keypress', moveDown);
-  }
-}
-function moveDown(event){
-  if (event.code === 'Space'){
-    y = y * 1.05;
-  }
-}
-//ZAMENJI NA SWIPE PO KKEYBOARDIH DA ZAMENJAS SMER
-
-function right(event){
-  if (event.code === 'KeyR'){
-    document.addEventListener('keypress', moveRight);
-  } else if (event.code === 'KeyU'){
-    document.removeEventListener('keypress', moveRight);
-  } else if (event.code === 'KeyL'){
-    document.removeEventListener('keypress', moveRight);
-  } else if (event.code === 'KeyD'){
-    document.removeEventListener('keypress', moveRight);
-  }
-}
-function moveRight(event){
-  if (event.code === 'Space'){
-    x = x * 1.05;
-  }
-}
-
-function left(event){
-  if (event.code === 'KeyL'){
-    document.addEventListener('keypress', moveLeft);
-    setTimeout(moveLeft(), 10);
-  } else if (event.code === 'KeyU'){
-    document.removeEventListener('keypress', moveLeft);
-  } else if (event.code === 'KeyR'){
-    document.removeEventListener('keypress', moveLeft);
-  } else if (event.code === 'KeyD'){
-    document.removeEventListener('keypress', moveLeft);
-  }
-}
-function moveLeft(event){
-  if (event.code === 'Space'){
-    x = x * 0.95;
-  }
-}
-
 
 
 // Setup is run once, at the start of the program. It sets everything up for us!
 function setup() {
+  createMaze();
   // Put your event listener code here
-  window.addEventListener('keydown', up);
-  window.addEventListener('keydown', right);
-  window.addEventListener('keydown', left);
-  window.addEventListener('keydown', down);
+  window.addEventListener('keydown', swipeRightLeft)
+  window.addEventListener('keydown', swipeUp);
   window.requestAnimationFrame(loop);
 } 
 
