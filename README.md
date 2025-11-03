@@ -90,17 +90,20 @@ unique (e.g. `id-1`).
 - className: CSS class to add (defaults to `thing`)
 Returns: the newly created `HTMLElement`.
 
-#### Instructions for the game
-choose your desired direction and press space to move
 
-LEFT:
-Swipe left on the top row (numbers row) to change direction
 
-RIGHT:
-Swipe right on the top row (numbers row) to change direction
+#### INSTRUCTIONS FOR THE GAME
+Goal: 
+- Reach the gold circle at the top of the maze
 
-UP:
-Swipe diagonaly up on the first column (ZAQ1) to change direction
-DOWN:
-Swipe diagonaly down on the first column (1QAZ) to change direction
+How to change directions:
+- Swipe left on the top row (from 0 to 2) to be able to move left
+- Swipe right on the top row (from 2 to 0) to be able to move right
+- Swipe diagonally up on the first column (from Z to 1) to be able to move up
+- Swipe diagonally down on the first column (from 1 to Z) to be able to move down
+
+How to play: 
+- Choose your desired direction of movement by swiping and hold space to move
+- Avoid the walls, otherwise the game restarts
+
 

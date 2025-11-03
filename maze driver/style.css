@@ -1,7 +1,7 @@
 .thing {
     width: 100px;
     height: 100px;
-    background-color: deeppink;
+    background-color: hsl(328, 100%, 54%);
     position: absolute;
     border-radius: 0%;
 }
@@ -71,6 +71,13 @@
     background-color: black;
     position: absolute;
     display: flex;
+}
+#end {
+    width: 40px;
+    height: 40px;
+    background-color: rgb(240, 197, 3);
+    position: absolute;
+    border-radius: 50%;
 }
 /* Prevent padding and border from affecting element width. */
 *,
