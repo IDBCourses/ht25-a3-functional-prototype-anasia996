@@ -90,3 +90,17 @@ unique (e.g. `id-1`).
 - className: CSS class to add (defaults to `thing`)
 Returns: the newly created `HTMLElement`.
 
+#### Instructions for the game
+choose your desired direction and press space to move
+
+LEFT:
+Swipe left on the top row (numbers row) to change direction
+
+RIGHT:
+Swipe right on the top row (numbers row) to change direction
+
+UP:
+Swipe diagonaly up on the first column (ZAQ1) to change direction
+DOWN:
+Swipe diagonaly down on the first column (1QAZ) to change direction
+
