@@ -5,6 +5,15 @@
     position: absolute;
     border-radius: 0%;
 }
+
+#end {
+    width: 40px;
+    height: 40px;
+    background-color: rgb(240, 197, 3);
+    position: absolute;
+    border-radius: 50%;
+}
+
 #thing1 {
     width: 40px;
     height: 660px;
@@ -72,13 +81,7 @@
     position: absolute;
     display: flex;
 }
-#end {
-    width: 40px;
-    height: 40px;
-    background-color: rgb(240, 197, 3);
-    position: absolute;
-    border-radius: 50%;
-}
+
 /* Prevent padding and border from affecting element width. */
 *,
 ::before,

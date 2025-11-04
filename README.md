@@ -93,17 +93,22 @@ Returns: the newly created `HTMLElement`.
 
 
 #### INSTRUCTIONS FOR THE GAME
+
 Goal: 
-- Reach the gold circle at the top of the maze
+- Get the pink square to the gold circle at the top of the maze without touching the walls
 
 How to change directions:
-- Swipe left on the top row (from 0 to 2) to be able to move left
-- Swipe right on the top row (from 2 to 0) to be able to move right
-- Swipe diagonally up on the first column (from Z to 1) to be able to move up
-- Swipe diagonally down on the first column (from 1 to Z) to be able to move down
+- Swipe left across the number keys to enable moving left
+- Swipe right across the number keys to enable moving right
+- Swipe diagonally up on the leftmost keys (from Z to 1) to be able to move up
+- Swipe diagonally down on the leftmost keys (from 1 to Z) to be able to move down
 
 How to play: 
-- Choose your desired direction of movement by swiping and hold space to move
-- Avoid the walls, otherwise the game restarts
+- Choose your desired direction of movement by swiping on the keyboard
+- Hold Space to move in the selected direction
+- Release Space to stop the movement
+
+Warning:
+- Avoid the walls, otherwise the game restarts!
 
 

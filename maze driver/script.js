@@ -5,73 +5,58 @@
 
 import * as Util from "./util.js";
 
-// Settings variables should contain all of the "fixed" parts of your programs
+// Fixed variables of my program.
 const size = 50;
 const startX = 1055;
 const startY = 625;
 const goalX = 1050;
 const goalY = 170;
-const row = ['Digit2', 'Digit3', 'Digit4', 'Digit5', 'Digit6', 'Digit7', 'Digit8', 'Digit9', 'Digit0']; // keys for moving right and left
-const column = ['Digit1', 'KeyQ', 'KeyA', 'KeyZ']; // keys for moving up and down
 
-// object that is placed at the winning location
+// Keys used to detect swipe to right/left.
+const row = ['Digit2', 'Digit3', 'Digit4', 'Digit5', 'Digit6', 'Digit7', 'Digit8', 'Digit9', 'Digit0']; 
+// Keys used to detect swipe up/down.
+const column = ['Digit1', 'KeyQ', 'KeyA', 'KeyZ']; 
+
+// Object placed at the winning location.
 const end = document.getElementById('end');
-// outside walls
+
+// MAZE WALLS
+// Outside walls
 const wall1 = document.getElementById('thing1');
 const wall2 = document.getElementById('thing2');
 const wall3 = document.getElementById('thing3');
 const wall4 = document.getElementById('thing4');
 
-// inside walls
+// Inside walls
 const wall5 = document.getElementById('thing5'); 
 const wall6 = document.getElementById('thing6'); 
 const wall7 = document.getElementById('thing7'); 
 const wall8 = document.getElementById('thing8'); 
 const wall9 = document.getElementById('thing9'); 
 
-// array of all the walls
+// Array of all the walls.
 const maze = [wall1, wall2, wall3, wall4, wall5, wall6, wall7, wall8, wall9];
 
 
-// State variables are the parts of your program that change over time.
+// Not fixed variables of my program.
 let x = startX;
 let y = startY;
 let previousKeyRow = null;
 let currentKeyRow = null;
 let previousKeyColumn = null;
 let currentKeyColumn = null;
-let directionX = null; 
-let directionY = null;
+let directionX = 0; 
+let directionY = 0;
 let isMoving = false;
 
-// the X position for each wall
-let wallX = [
-  490,
-  1110,
-  490,
-  490,
-  655,
-  800,
-  800,
-  800,
-  655
-];
+// X position for each wall, matching maze[] order.
+let wallX = [ 490, 1110, 490, 490, 655, 800, 800, 800, 655];
 
-// the Y positionn for each wall
-let wallY = [
-  90,
-  90,
-  90,
-  710,
-  90,
-  255,
-  255,
-  400,
-  545
-];
+// The Y position for each wall, matching maze[] order.
+let wallY = [ 90, 90, 90, 710, 90, 255, 255, 400, 545];
 
 
-// start position in the beginning or after restart
+// Start position in the beginning or after restart.
 function startPosition(){
   Util.setPositionPixels(startX, startY);
   x = startX;
@@ -82,53 +67,60 @@ function startPosition(){
   currentKeyColumn = null;
 }
 
-// recognize whether the swipe is to the left or right
+// Recognizes whether the swipe is to the left or right.
 function swipeRightLeft(event){
   if (row.includes(event.code)){
     previousKeyRow = currentKeyRow;
     currentKeyRow = event.code;
+
     let previousIndexRow = row.indexOf(previousKeyRow);
     let currentIndexRow = row.indexOf(currentKeyRow);
-    directionY = 0; // prevents from moving up, down or even diagonally
-    if (currentIndexRow === previousIndexRow || // incase you press any other keys
+
+    directionY = 0; // Prevents from moving vertically or diagonally.
+
+    if (currentIndexRow === previousIndexRow || 
       currentIndexRow === -1 ||
       previousIndexRow === -1
     ){
       directionX = 0;
     } else if (currentIndexRow > previousIndexRow){
-      directionX = 1; // direction right
+      directionX = 1; // Right
     } else if (currentIndexRow < previousIndexRow){
-      directionX = -1; // direction left
+      directionX = -1; // Left
     }
-  console.log(`Direction of the swipe is ${directionX}`);
+    console.log(`Horizontal direction is ${directionX}`);
   }
 }
 
-// recognize whether the swipe is up or down
+// Recognizes whether the swipe is up or down.
 function swipeUpDown(event){
   if (column.includes(event.code)){
     previousKeyColumn = currentKeyColumn;
     currentKeyColumn = event.code;
+
     let previousIndexColumn = column.indexOf(previousKeyColumn);
     let currentIndexColumn = column.indexOf(currentKeyColumn);
-    directionX = 0; // prevents from moving left, right or diagonally
+
+    directionX = 0; // Prevents from moving horizontally or diagonally.
+
     if (currentIndexColumn === previousIndexColumn ||
       currentIndexColumn === -1 ||
       previousIndexColumn === -1
     ){
       directionY = 0;
     } else if (currentIndexColumn < previousIndexColumn){
-      directionY = 1; // direction up
+      directionY = 1; // Up
     } else if (currentIndexColumn > previousIndexColumn){
-      directionY = -1; // direction down
+      directionY = -1; // Down
     } 
-  console.log(`Direction of the swipe is ${directionY}`);
+  console.log(`Vertical direction is ${directionY}`);
   }
 }
 
-function checkSpace(event){ // checks if spacebar is being pressed 
+// Checks if spacebar is pressed.
+function checkSpace(event){ 
   if (event.code === 'Space'){
-    // checks if spacebar is held and not pressed repeatedly
+    // Checks if spacebar is held and not pressed repeatedly.
     if (event.type === 'keydown' && !event.repeat){
       isMoving = true;
     } else if (event.type === 'keyup'){ 
@@ -137,28 +129,30 @@ function checkSpace(event){ // checks if spacebar is being pressed
   }
 }
 
-// makes the object move depending on the swipe and direction of it
+// Makes the object move depending on the swipe and direction of it.
 function movement(){
   if (isMoving){
     if (directionX > 0){
-      x += 5; // moving right
+      x += 3; // Moving right
     } else if (directionX < 0){
-      x -= 5; // moving leftt
+      x -= 3; // Moving left
     }
 
     if (directionY > 0){
-      y -= 5; // moving up
+      y -= 3; // Moving up
     } else if (directionY < 0) {
-      y += 5; // moving down
+      y += 3; // Moving down
     }
   }
 }
 
-// checks if the object is touching any of the walls
+// Checks if the object is touching any of the walls.
 function checkCollision(x, y) {
   const between = (x, min, max) => {
     if (x >= min && x <= max){
       return true;
+    } else {
+      return false;
     }
   }
   if( 
@@ -173,22 +167,21 @@ function checkCollision(x, y) {
     between(x, 605, 1060) && between(y, 495, 585) // wall9
   ){ 
     return true;
-  }
-  else {
+  } else {
     return false;
   }
 }
 
-//check if the object is at the winning location
+// Checks if the object is at the winning location.
 function winningLocation(x, y){
-  if (x > goalX - 10 && y < goalY){
+  if (x > goalX - 10 && y < goalY + 20){
     return true;
   } else {
     return false;
   }
 }
 
-//incase of winning the game everything stops, have to reload the website
+// In case of winning the game everything stops, have to reload the website to play again.
 function gameEnd(){
   window.removeEventListener('keydown', swipeRightLeft);
   window.removeEventListener('keydown', swipeUpDown);
@@ -203,10 +196,11 @@ function gameEnd(){
 function loop() {
   Util.setSize(size);
   Util.setPositionPixels(x, y);
+
   movement();
-  if (checkCollision(x,y)){ //incase of collison restart the game
+  if (checkCollision(x,y)){ // In case of collision, restart the game.
     startPosition();
-    isMoving = false; //stops movement if touches the walls
+    isMoving = false; // Stops movement if it touches walls.
     console.log('GAME OVER, START AGAIN!')
   }
   if (winningLocation(x, y)){
@@ -217,11 +211,12 @@ function loop() {
 
 
 
-// Setup is run once, at the start of the program. It sets everything up for us!
+// Setup of the program.
 function setup() {
   startPosition();
+
   for (let i = 0; i < maze.length; i++){
-    Util.setPositionPixels(wallX[i], wallY[i], maze[i]);
+    Util.setPositionPixels(wallX[i], wallY[i], maze[i]);  // Positions each wall of the maze.
   }
   Util.setPositionPixels(goalX, goalY, end)
   window.addEventListener('keydown', swipeRightLeft);
@@ -229,7 +224,8 @@ function setup() {
 
   window.addEventListener('keydown', checkSpace);
   window.addEventListener('keyup', checkSpace);
+  
   window.requestAnimationFrame(loop);
 } 
 
-setup(); // Always remember to call setup()!
+setup(); 
